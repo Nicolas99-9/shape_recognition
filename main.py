@@ -48,6 +48,35 @@ def extract(filename):
     print data_folders
     return data_folders
 
+
 train_folders = extract(train_filename)
 test_folders = extract(test_filename)
 
+
+#convert the entire dataset into a 3D array (image_index, x,y) of floating point value
+# normalized the data to have zero mean and the standart deviation around 0.5 to make the training easier
+#the labels will be stored into a separate arry of integers
+
+
+image_size = 28
+pixel_depth = 225.0 # number of levels per pixels
+
+def load(data_folders, min_num_images, max_num_images):
+  dataset = np.ndarray(
+    shape=(max_num_images, image_size, image_size), dtype=np.float32)
+  labels = np.ndarray(shape=(max_num_images), dtype=np.int32)
+  label_index = 0
+  image_index = 0
+  for folder in data_folders:
+    print folder
+    for image in os.listdir(folder):
+      if image_index >= max_num_images:
+        raise Exception('More images than expected: %d >= %d' % (
+          num_images, max_num_images))
+      image_file = os.path.join(folder, image)
+
+
+# to complete
+#to do...
+
+print("normalemet")

@@ -8,6 +8,7 @@ from scipy import ndimage
 from sklearn.linear_model import LogisticRegression
 import cPickle as pickle
 
+
 #load the data to the local machine
 #the data is a set of characters rendered in a variety of fonts of 28*28 pixels
 #the label are limited to 'A' through 'J'
@@ -170,7 +171,16 @@ def save_data(train_dataset,train_labels,valid_dataset,valid_labels,test_dataset
     print 'Compressed pickle size:', statinfo.st_size
 
 
-save_data(valid_dataset,valid_labels,train_dataset2,train_labels2,test_dataset,test_labels)
+#save_data(valid_dataset,valid_labels,train_dataset2,train_labels2,test_dataset,test_labels)
+
+def test_regression():
+    logreg = LogisticRegression()
+    logreg.fit(train_dataset, train_labels)
+    print("items : ",test_dataset.items())
+    print(test_labels)
+    print(logreg.predict(test_dataset,test_labels))
+   
 
 
-
+print("start regression")
+test_regression()

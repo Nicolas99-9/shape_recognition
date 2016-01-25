@@ -37,10 +37,15 @@ test_filename = download('notMNIST_small.tar.gz',    8458043)
 num_classes = 10
 
 def extract(filename):
-    tar = tarfile.open(filename)
-    print(filename)
-    tar.extractall()
-    tar.close()
+    print(os.getcwd()+"/"+filename)
+    if os.path.exists(filename):
+        print("Folder doesn't exist, creation...")
+	tar = tarfile.open(filename)
+	print(filename)
+	tar.extractall()
+	tar.close()
+    else:
+	 print("folder already exists")    
     root = os.path.splitext(os.path.splitext(filename)[0])[0]
     # remove the .tar.gz
     print("racine :",root)

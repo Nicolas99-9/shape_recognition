@@ -143,7 +143,34 @@ def get_some_elements(train_size,valid_size):
     train_labels2 = train_labels[valid_size:valid_size+train_size]
     print 'Training', train_dataset2.shape, train_labels2.shape
     print 'Validation', valid_dataset.shape, valid_labels.shape
+    return valid_dataset,valid_labels,train_dataset2,train_labels2
 
 
-get_some_elements(200000,10000)
+valid_dataset,valid_labels,train_dataset2,train_labels2= get_some_elements(200000,10000)
+
+
+def save_data(train_dataset,train_labels,valid_dataset,valid_labels,test_dataset,test_labels):
+    pickle_file = 'notMNIST.pickle'
+    try:
+      f = open(pickle_file, 'wb')
+      save = {
+        'train_dataset': train_dataset,
+        'train_labels': train_labels,
+        'valid_dataset': valid_dataset,
+        'valid_labels': valid_labels,
+        'test_dataset': test_dataset,
+        'test_labels': test_labels,
+        }
+      pickle.dump(save, f, pickle.HIGHEST_PROTOCOL)
+      f.close()
+    except Exception as e:
+      print 'Unable to save data to', pickle_file, ':', e
+      raise
+    statinfo = os.stat(pickle_file)
+    print 'Compressed pickle size:', statinfo.st_size
+
+
+save_data(valid_dataset,valid_labels,train_dataset2,train_labels2,test_dataset,test_labels)
+
+
 

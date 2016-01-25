@@ -26,8 +26,8 @@ def download(filename, excepeted_bytes):
     else:
         raise Exception('Failed to verify' + filename)
     return filename
-
-train_filename = download('notMNIST_large.tar.gz', 247336696)
+#use notMNIST_large.tar.gz to train with all the data
+train_filename = download('notMNIST_small.tar.gz', 8458043)
 test_filename = download('notMNIST_small.tar.gz',    8458043)
 
 
@@ -38,7 +38,7 @@ num_classes = 10
 
 def extract(filename):
     print(os.getcwd()+"/"+filename)
-    if os.path.exists(filename):
+    if not os.path.exists(filename):
         print("Folder doesn't exist, creation...")
 	tar = tarfile.open(filename)
 	print(filename)
@@ -98,12 +98,12 @@ def load(data_folders, min_num_images, max_num_images):
   if num_images < min_num_images:
     raise Exception('Many fewer images than expected: %d < %d' % (
         num_images, min_num_images))
-  print 'Full dataset tensor:', dataset.shape
-  print 'Mean:', np.mean(dataset)
-  print 'Standard deviation:', np.std(dataset)
-  print 'Labels:', labels.shape
+  print 'Full dataset tensor:', dataset.shape #number of different images
+  print 'Mean:', np.mean(dataset)  # the average value 
+  print 'Standard deviation:', np.std(dataset)  #deviation
+  print 'Labels:', labels.shape  #the number of labels, must be equalt to the full dataset size
   return dataset, labels
 
 
-train_dataset, train_labels = load(train_folders, 450000, 550000)
+train_dataset, train_labels = load(train_folders, 18724, 550000)
 test_dataset, test_labels = load(test_folders, 18000, 20000)

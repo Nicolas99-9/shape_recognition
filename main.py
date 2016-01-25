@@ -119,4 +119,14 @@ def randomize(dataset,labels):
     return shuffled_dataset,shuffled_labels
 
 
-shuffle_data,shuffle_labels = randomize(train_dataset,train_labels)
+def affichage(): 
+    dico = {}
+    for s in train_labels:
+        if not s in dico:
+            dico[s]=1
+        else:
+            dico[s]+=1
+    plt.barh(dico.keys(), dico.values())
+    plt.savefig("test.png")
+    plt.show()
+affichage()

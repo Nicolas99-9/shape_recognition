@@ -38,10 +38,12 @@ num_classes = 10
 
 def extract(filename):
     tar = tarfile.open(filename)
+    print(filename)
     tar.extractall()
     tar.close()
     root = os.path.splitext(os.path.splitext(filename)[0])[0]
     # remove the .tar.gz
+    print("racine :",root)
     data_folders = [os.path.join(root,d) for d in sorted(os.listdir(root))]
     if len(data_folders) != num_classes :
          raise Exception("wrond number of folders %d" %(num_classes, len(data_folders)))
@@ -64,6 +66,7 @@ pixel_depth = 225.0 # number of levels per pixels
 def load(data_folders, min_num_images, max_num_images):
   dataset = np.ndarray(
     shape=(max_num_images, image_size, image_size), dtype=np.float32)
+  #create the arrays to store the images
   labels = np.ndarray(shape=(max_num_images), dtype=np.int32)
   label_index = 0
   image_index = 0
@@ -74,9 +77,28 @@ def load(data_folders, min_num_images, max_num_images):
         raise Exception('More images than expected: %d >= %d' % (
           num_images, max_num_images))
       image_file = os.path.join(folder, image)
+      try:
+        image_data = (ndimage.imread(image_file).astype(float)- pixel_depth /2 ) / pixel_depth
+        if image_data.shape != (image_size,image_size):
+	     raise Exception('Unexpected image shape: %s' % str(image_data.shape))
+        dataset[image_index, :,:] = image_data
+        labels[image_index] = label_index
+        image_index +=1
+      except IOError as e:
+        print 'Could not read:', image_file, ':', e, '- it\'s ok, skipping.'
+    label_index += 1
+  num_images = image_index
+  dataset = dataset[0:num_images, :, :]
+  labels = labels[0:num_images]
+  if num_images < min_num_images:
+    raise Exception('Many fewer images than expected: %d < %d' % (
+        num_images, min_num_images))
+  print 'Full dataset tensor:', dataset.shape
+  print 'Mean:', np.mean(dataset)
+  print 'Standard deviation:', np.std(dataset)
+  print 'Labels:', labels.shape
+  return dataset, labels
 
 
-# to complete
-#to do...
-
-print("normalemet")
+train_dataset, train_labels = load(train_folders, 450000, 550000)
+test_dataset, test_labels = load(test_folders, 18000, 20000)

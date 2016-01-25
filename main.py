@@ -113,11 +113,15 @@ test_dataset, test_labels = load(test_folders, 18000, 20000)
 
 np.random.seed(133)
 def randomize(dataset,labels):
+    # generation permutation with the max number of elements in the train data 
     permutation = np.random.permutation(labels.shape[0])
+    #get some elements contains in the permuation => a list containing the positions
     shuffled_dataset = dataset[permutation,:,:]
     shuffled_labels = dataset[permutation]
     return shuffled_dataset,shuffled_labels
 
+
+shuffle_data,shuffle_labels = randomize(train_dataset,train_labels)
 
 def affichage(): 
     dico = {}
@@ -130,3 +134,16 @@ def affichage():
     plt.savefig("test.png")
     plt.show()
 affichage()
+
+
+def get_some_elements(train_size,valid_size):
+    valid_dataset = train_dataset[:valid_size,:,:]
+    valid_labels = train_labels[:valid_size]
+    train_dataset2 = train_dataset[valid_size:valid_size+train_size,:,:]
+    train_labels2 = train_labels[valid_size:valid_size+train_size]
+    print 'Training', train_dataset2.shape, train_labels2.shape
+    print 'Validation', valid_dataset.shape, valid_labels.shape
+
+
+get_some_elements(200000,10000)
+

@@ -107,3 +107,16 @@ def load(data_folders, min_num_images, max_num_images):
 
 train_dataset, train_labels = load(train_folders, 18724, 550000)
 test_dataset, test_labels = load(test_folders, 18000, 20000)
+
+
+#method to display the dataset
+
+np.random.seed(133)
+def randomize(dataset,labels):
+    permutation = np.random.permutation(labels.shape[0])
+    shuffled_dataset = dataset[permutation,:,:]
+    shuffled_labels = dataset[permutation]
+    return shuffled_dataset,shuffled_labels
+
+
+shuffle_data,shuffle_labels = randomize(train_dataset,train_labels)
